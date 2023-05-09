@@ -5,8 +5,32 @@ from django.utils import timezone
 
 # 카테고리 모델
 class ProductCategory(models.Model):
-    name = models.CharField(max_length=50)
-
+    name = models.CharField("분류", max_length=50)
+    is_used = models.BooleanField("True=사용, False=사용안함", default=True)
+    """
+    인기매물, 
+    디지털기기, 
+    생활가전, 
+    가구 인테리어, 
+    생활 주방, 
+    유아동, 
+    도서, 
+    여성의류,
+    여성잡화, 
+    남성의류,
+    남성잡화, 
+    뷰티 미용, 
+    스포츠 레저, 
+    취미/게임 음반, 
+    중고차, 
+    티켓 교환권, 
+    가공식품, 
+    반려동물용품, 
+    식물, 
+    기타 중고물품, 
+    삽니다, 
+    부동산
+    """
     def __str__(self):
         return self.name
 
