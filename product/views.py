@@ -86,7 +86,19 @@ class ProductDetailView(APIView):
     # 수정
     # user_id 넣기
     def put(self, request, product_id):
-        pass
+        # user = get_object_or_404(User, id=user_id)
+        # if request.user == user:
+        product = get_object_or_404(Product, id=product_id)
+        serializer = ProductCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            print(product)
+            serializer.update(product, validated_data=request.data)
+            # serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # else:
+            # return Response({"message": "권한이 없습니다!"}, status=status.HTTP_403_FORBIDDEN)
 
     # 삭제
     # user_id 넣기

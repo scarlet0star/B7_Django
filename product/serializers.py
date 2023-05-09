@@ -38,6 +38,7 @@ class ProductCreateSerializer(serializers.ModelSerializer):
         model = Product
         fields = ("title", "content", "price", "is_free", "image",
                   "bargain", "place", "category", "refreshed_at",)
+        # "user", 
 
 
 # 상품 카테고리
