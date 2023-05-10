@@ -42,12 +42,12 @@ class Delete(APIView):
         request.user.delete()
         return Response(data={'message': '회원탈퇴 성공'}, status=status.HTTP_200_OK)
 # 비밀번호 찾기    
-class Find(APIView):
+class FindPassword(APIView):
     def get(self, request, format=None):
         serializer = UserFindSerializer(request.user)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 # 비밀번호 변경    
-class Change(APIView):
+class ChangePassword(APIView):
     def put(self, request, format=None):
         serializer = UserChangeSerializer(request.user, data=request.data)
         if serializer.is_valid():
