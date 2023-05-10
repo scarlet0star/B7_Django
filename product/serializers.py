@@ -21,7 +21,6 @@ from product.models import Product, ProductCategory
 "created_at": "생성일",
 "updated_at": "수정일",
 """
-# bookmark, user 빠짐
 
 
 # 상품 피드
@@ -29,7 +28,6 @@ class ProductFeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
-        # "user", "bookmark",
 
 
 # 상품 등록
@@ -37,8 +35,7 @@ class ProductCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ("title", "content", "price", "is_free", "image",
-                  "bargain", "place", "category", "refreshed_at",)
-        # "user", 
+                  "bargain", "place", "category", "refreshed_at", "is_hide",)
 
 
 # 상품 카테고리
@@ -46,3 +43,10 @@ class ProductCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductCategory
         fields = "__all__"
+
+
+# 끌어올리기
+class ProductRefreshSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ("refreshed_at",)
