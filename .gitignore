@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,python,django,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,python,django,visualstudiocode
+=======
+# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,django,python
+# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,django,python
+>>>>>>> 6e209b6d62190b55aa2eaaaf50494025d4d46097
 
 ### Django ###
 *.log
@@ -171,6 +176,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
+<<<<<<< HEAD
 ### macOS ###
 # General
 .DS_Store
@@ -204,6 +210,8 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
+=======
+>>>>>>> 6e209b6d62190b55aa2eaaaf50494025d4d46097
 ### Python ###
 # Byte-compiled / optimized / DLL files
 
@@ -289,6 +297,11 @@ Temporary Items
 ### Python Patch ###
 # Poetry local configuration file - https://python-poetry.org/docs/configuration/#local-configuration
 poetry.toml
+<<<<<<< HEAD
+=======
+pyproject.toml
+poetry.lock
+>>>>>>> 6e209b6d62190b55aa2eaaaf50494025d4d46097
 
 # ruff
 .ruff_cache/
@@ -298,7 +311,10 @@ pyrightconfig.json
 
 ### VisualStudioCode ###
 .vscode/*
+<<<<<<< HEAD
 .vscode
+=======
+>>>>>>> 6e209b6d62190b55aa2eaaaf50494025d4d46097
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -316,6 +332,7 @@ pyrightconfig.json
 .history
 .ionide
 
+<<<<<<< HEAD
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
@@ -343,3 +360,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,python,django,visualstudiocode
+=======
+# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,django,python
+>>>>>>> 6e209b6d62190b55aa2eaaaf50494025d4d46097
