@@ -35,7 +35,7 @@ class ProductCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ("title", "content", "price", "is_free", "image",
-                  "bargain", "place", "category", "refreshed_at",)
+                  "bargain", "place", "category", "refreshed_at", "is_hide",)
 
 
 # 상품 카테고리
@@ -43,3 +43,10 @@ class ProductCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductCategory
         fields = "__all__"
+
+
+# 끌어올리기
+class ProductRefreshSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ("refreshed_at",)

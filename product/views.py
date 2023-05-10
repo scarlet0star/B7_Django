@@ -6,6 +6,7 @@ from product.serializers import ProductFeedSerializer, ProductCreateSerializer, 
 from product.models import Product, ProductCategory
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
+from django.utils import timezone
 
 
 # 페이지네이션
@@ -46,20 +47,39 @@ class ProductDetailView(APIView):
     # 자세히보기
     def get(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
-        serializer = ProductFeedSerializer(product)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        # 보이기 상태일때
+        if product.is_hide == False:
+            serializer = ProductFeedSerializer(product)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        # 숨기기 상태일때
+        elif product.is_hide == True:
+            if request.user == product.user:
+                serializer = ProductFeedSerializer(product)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "권한이 없습니다!"}, status=status.HTTP_403_FORBIDDEN)
 
     # 수정
     def put(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
         
         if request.user == product.user:
-            serializer = ProductCreateSerializer(product, data=request.data)
-            if serializer.is_valid():
-                serializer.save(user=request.user)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+            # 끌어올리기
+            if "refreshed_at" in request.data:
+                product.refreshed_at = timezone.now()
+                product.save()
+                return Response({"message": "끌어올렸습니다!"}, status=status.HTTP_200_OK)
+
+            # 내용 수정
             else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                serializer = ProductCreateSerializer(product, data=request.data)
+                if serializer.is_valid():
+                    serializer.save(user=request.user)
+                    return Response(serializer.data, status=status.HTTP_200_OK)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"message": "권한이 없습니다!"}, status=status.HTTP_403_FORBIDDEN)
 
