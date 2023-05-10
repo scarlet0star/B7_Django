@@ -17,6 +17,8 @@ ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -29,8 +31,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     "product",
     "articles",
+    'chat',
     "drf_yasg",
     'users',
+
 
 ]
 
@@ -45,6 +49,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = ["http://localhost:8000"]
 
 ROOT_URLCONF = "B7.urls"
@@ -66,8 +71,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "B7.wsgi.application"
+ASGI_APPLICATION = 'B7.asgi.application'
 
-
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
