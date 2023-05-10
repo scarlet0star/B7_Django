@@ -11,7 +11,7 @@ load_dotenv(os.path.join(PROJECT_DIR, '.env'))
 # .env에 저장되어있는 변수들
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = os.getenv('DJANGO_DEBUG') == 'True'
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
 
 
 # Application definition
@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     "corsheaders",
     'rest_framework_simplejwt',
     "product",
-
+    'users',
 ]
 
 MIDDLEWARE = [
