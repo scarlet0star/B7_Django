@@ -4,19 +4,11 @@ from rest_framework.views import APIView
 from rest_framework import status, permissions
 from product.serializers import ProductFeedSerializer, ProductCreateSerializer, ProductCategorySerializer
 from product.models import Product, ProductCategory
-
-# 페이지네이션 import
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
 
 
 # 페이지네이션
-# 많이
-class LargeResultsSetPagination(PageNumberPagination):
-    page_size = 1000
-
-
-# 보통
 class StandardResultsSetPagination(PageNumberPagination):
     """
     마무리할때 size조정 필요
@@ -25,16 +17,15 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 
 # 판매중 상품 피드 페이지
-"""비로그인 사용자도 볼 수 있음"""
+"""모든 사용자"""
 class ProductFeedView(generics.ListAPIView):
-    queryset = Product.objects.filter(
-        transaction_status=0).order_by('-refreshed_at')
+    queryset = Product.objects.filter(transaction_status=0, is_hide=False).order_by('-refreshed_at')
     serializer_class = ProductFeedSerializer
     pagination_class = StandardResultsSetPagination
 
 
 # 상품 등록
-"""로그인 사용자만"""
+"""로그인 사용자"""
 class ProductCreateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -48,7 +39,7 @@ class ProductCreateView(APIView):
 
 
 # 상품 자세히보기 수정 삭제
-"""로그인 사용자만"""
+"""로그인 사용자"""
 class ProductDetailView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -82,6 +73,21 @@ class ProductDetailView(APIView):
             return Response({"message": "삭제되었습니다."}, status=status.HTTP_204_NO_CONTENT)
         else:
             return Response({"message": "권한이 없습니다!"}, status=status.HTTP_403_FORBIDDEN)
+
+
+# 관심상품 리스트
+"""로그인 사용자"""
+class ProductBookmarkView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ProductFeedSerializer
+    pagination_class = StandardResultsSetPagination
+
+    # user_id 가져오기 위해 오버라이딩
+    def get_queryset(self):
+        user_id = self.request.user.id
+        queryset = Product.objects.filter(transaction_status=0, is_hide=False, bookmark=user_id).order_by('-refreshed_at')
+        """거래중, 숨김상태 아님, 요청유저가 북마크한것만"""
+        return queryset
 
 
 # 상품 카테고리 페이지
