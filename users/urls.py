@@ -14,13 +14,3 @@ urlpatterns = [
     path('changepassword/', views.Change.as_view(), name='changepassword'),
     path('list/', views.List.as_view(), name='list'),
 ]
-
-# 로그인
-# 로그아웃
-# 회원가입
-# 회원정보 수정
-# 회원상세정보
-# 회원탈퇴
-# 비밀번호 찾기
-# 비밀번호 변경
-# 회원목록
