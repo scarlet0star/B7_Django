@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'chat',
     "drf_yasg",
     'users',
+    "office",
 
 
 ]
