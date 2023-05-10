@@ -1,5 +1,5 @@
 from django.db import models
-# from user.models import User
+from users.models import User
 from django.utils import timezone
 
 
@@ -37,7 +37,7 @@ class ProductCategory(models.Model):
 
 # 상품 모델
 class Product(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     # 내용
     title = models.CharField("제목", max_length=50)
     content = models.TextField("내용", blank=False)
@@ -57,7 +57,7 @@ class Product(models.Model):
     refreshed_at = models.DateTimeField(
         "끌어올리기, 끌어올리기 할때마다 최신화, 리스트 정렬 기준", null=True)
     is_hide = models.BooleanField("숨기기", default=False)
-    # bookmark = models.ManyToManyField(User, related_name='bookmark_product')
+    bookmark = models.ManyToManyField(User, related_name='bookmark_product', blank=True)
 
     created_at = models.DateTimeField("작성일", auto_now_add=True)
     updated_at = models.DateTimeField("수정일", auto_now=True)
