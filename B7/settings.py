@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "product",
     "articles",
     "drf_yasg",
+    'users',
 
 ]
 
