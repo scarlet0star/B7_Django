@@ -27,16 +27,14 @@ class RoomView(APIView):
             room_info[room_id] = room_user_list
         if room_info == {}:
             room_info = None
-        return Response(room_info, status=200)
+        return Response(room_info, status=status.HTTP_200_OK)
 
     def post(self, request):
         # 게시글 작성자와 1:1 채팅방이 존재한다면 해당 채팅방 id를 전해준다.
         # 존재하지 않는다면 채팅방을 새로 개설하고 id를 전해준다
 
         user1 = User.objects.get(id=request.user.id)
-        print(user1)
         user2 = User.objects.get(id=request.data.get('author'))
-        print(user2)
         find_room_q = RoomJoin.objects.filter(user_id__in=[user1.id, user2.id])
         
         find_room_list = []
@@ -46,13 +44,22 @@ class RoomView(APIView):
         result = Counter(find_room_list)
         for key, value in result.items():
             if value >= 2:
-                return Response(key.id, status=200)
+                return Response(key.id, status=status.HTTP_200_OK)
 
         room = Room.objects.create()
         RoomJoin.objects.create(user_id=user1, room_id=room)
         RoomJoin.objects.create(user_id=user2, room_id=room)
 
-        return Response(room.id, status=200)
+        return Response(room.id, status=status.HTTP_201_CREATED)
+
+    def delete(self, request):
+        try:
+            room = Room.objects.get(id=request.data.get('room_id'))
+            room.delete()
+            return Response(status=status.HTTP_200_OK)
+
+        except:
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChatRoom(APIView):
@@ -65,8 +72,8 @@ class ChatRoom(APIView):
             message = Message.objects.filter(room_id=room_id)
             # 프로필이미지 출력하려면 추가.
 
-            return Response(message, status=200)
+            return Response(message, status=status.HTTP_200_OK)
 
         except:
-            return Response(None, status=400)
+            return Response(None, status=status.HTTP_400_BAD_REQUEST)
 
