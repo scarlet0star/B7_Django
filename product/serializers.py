@@ -44,9 +44,3 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         model = ProductCategory
         fields = "__all__"
 
-
-# 끌어올리기
-class ProductRefreshSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = ("refreshed_at",)
