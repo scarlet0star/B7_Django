@@ -14,12 +14,30 @@ from product.serializers import *
 
 from .serializers import *
 
+User = get_user_model()
+
+
+class UserWriteCount(APIView):
+    def get(self, request):
+        users = User.objects.annotate(
+            num_products=Count('product', distinct=True),
+            num_posts=Count('post_set', distinct=True),
+            num_comments=Count('comment_set', distinct=True)
+        )
+        user_data = {}
+        for user in users:
+            user_data[user.email] = [user.num_products, user.num_posts,
+                                     user.num_comments]
+       
+        return Response(user_data)
+
 
 class ProductView(APIView):
     def get(self, request):
-        product = Product.objects.all().order_by("views")
+        product = Product.objects.all().order_by("-views")
         serializer = ProductFeedSerializer(product, many=True)
         return Response(serializer.data)
+
 
 class ProductCountView(APIView):
     def get(self, request):
@@ -38,11 +56,14 @@ class ProductCountView(APIView):
         }
         return Response(data)
 
+
 class CategoryProductCountAPIView(APIView):
     def get(self, request, format=None):
-        categories = ProductCategory.objects.annotate(products=Count('product'))
+        categories = ProductCategory.objects.annotate(
+            products=Count('product'))
         data = {category.name: category.products for category in categories}
         return Response(data)
+
 
 class TransactionStatusCountAPIView(APIView):
     def get(self, request, format=None):
@@ -56,23 +77,27 @@ class TransactionStatusCountAPIView(APIView):
 
         return Response(data)
 
-class GiveAdmin(APIView):
+
+class ToggleIsAdmin(APIView):
     permission_classes = [IsAdminUser]
+
     def put(self, request, pk):
         user = get_object_or_404(get_user_model(), pk=pk)
-        data = {'is_active': not user.is_admin}
-        serializer = AdminSerializer(user,data=data,partial=True)
+        data = {'is_admin': not user.is_admin}
+        serializer = AdminSerializer(user, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ToggleUserIsActive(APIView):
     permission_classes = [IsAdminUser]
-    def put(self,request,pk):
+
+    def put(self, request, pk):
         user = get_object_or_404(get_user_model(), pk=pk)
         data = {'is_active': not user.is_active}
-        serializer = AdminSerializer(user,data=data,partial=True)
+        serializer = AdminSerializer(user, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)
