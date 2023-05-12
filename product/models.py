@@ -43,7 +43,7 @@ class Product(models.Model):
     content = models.TextField("내용", blank=False)
     price = models.IntegerField("가격")
     is_free = models.BooleanField("무료나눔", default=False)           # True=무료나눔, False=판매
-    image = models.ImageField("사진", blank=True, upload_to='%Y/%m/')
+    # image = models.ImageField("사진", blank=True, upload_to='%Y/%m/')
     bargain = models.BooleanField("가격제안 여부", default=False)      # True=가격제안 가능, False=가격제안 불가
     place = models.TextField("장소", blank=True)
     category = models.ManyToManyField(ProductCategory, related_name='product')
@@ -77,3 +77,9 @@ class Product(models.Model):
             super().save(*args, **kwargs)
         else:
             super().save(*args, **kwargs)
+
+
+# 상품 이미지 모델
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField("이미지", upload_to='%Y/%m/')

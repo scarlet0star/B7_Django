@@ -15,7 +15,8 @@ class ProductCreateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        serializer = ProductCreateSerializer(data=request.data)
+        serializer = ProductCreateSerializer(data=request.data, context={"images":request.data.getlist("images")})
+        print(request.data)
         if serializer.is_valid():
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -97,7 +98,7 @@ class ProductFeedView(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
 
-# 상품 카테고리 페이지
+# 상품 카테고리 정보
 """모든 사용자"""
 class ProductCategoryView(APIView):
     def get(self, request):
