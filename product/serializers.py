@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from product.models import Product, ProductCategory
+from product.models import Product, ProductCategory, ProductImage
 
 
 """
@@ -23,8 +23,17 @@ from product.models import Product, ProductCategory
 """
 
 
+# 상품 이미지 생성 시리얼라이저
+class ProductImageCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ('image',)
+
+
 # 상품 피드
 class ProductFeedSerializer(serializers.ModelSerializer):
+    images = ProductImageCreateSerializer(many=True, required=False)
+
     class Meta:
         model = Product
         fields = "__all__"
@@ -32,10 +41,27 @@ class ProductFeedSerializer(serializers.ModelSerializer):
 
 # 상품 등록
 class ProductCreateSerializer(serializers.ModelSerializer):
+    images = ProductImageCreateSerializer(many=True, required=False)
+
     class Meta:
         model = Product
-        fields = ("title", "content", "price", "is_free", "image",
+        fields = ("title", "content", "price", "is_free", "images",
                   "bargain", "place", "category", "refreshed_at", "is_hide",)
+    
+    def create(self, validated_data):
+        print(validated_data)
+        images_data = self.context.get('images', None)
+        # images_data = validated_data.pop('images', None)
+        product = super().create(validated_data)
+        if images_data:
+            for image_data in images_data:
+                print(images_data)
+                print(type(images_data))
+                print(image_data)
+                print(type(image_data))
+                ProductImage.objects.create(product=product, image=image_data)
+                # ProductImage.objects.create(product=product, **image_data)
+        return product
 
 
 # 상품 카테고리
@@ -44,9 +70,3 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         model = ProductCategory
         fields = "__all__"
 
-
-# 끌어올리기
-class ProductRefreshSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = ("refreshed_at",)
