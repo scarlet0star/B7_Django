@@ -98,6 +98,21 @@ class ProductFeedView(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
 
+# 카테고리 생성
+"""관리자만"""
+class ProductCategoryCreateView(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request):
+        serializer = ProductCategorySerializer(data=request.data)
+        print(request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 # 상품 카테고리 정보
 """모든 사용자"""
 class ProductCategoryView(APIView):

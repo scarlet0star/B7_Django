@@ -5,7 +5,7 @@ from django.utils import timezone
 
 # 카테고리 모델
 class ProductCategory(models.Model):
-    name = models.CharField("분류", max_length=50)
+    name = models.CharField("분류", max_length=50, unique=True)
     is_used = models.BooleanField("True=사용, False=사용안함", default=True)
     """
     인기매물, 
