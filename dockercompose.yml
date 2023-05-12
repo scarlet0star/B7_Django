@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    build:
+      context: ./config/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./django:/app
+      - ./config/nginx:/etc/nginx.conf.d
+      - ./django/media:/media
+    depends_on:
+      - django_app
+
+  mysql:
+    image: mysql:8.0.29
+    container_name: mysql
+    expose:
+      - "3306"
+    env_file:
+      - "./config/db/.env"
+    environment:
+      TZ: Asia/Seoul
+    volumes:
+      - ./config/db/data:/var/lib/mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  django_app:
+    container_name: django_app
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "
+        python3 manage.py collectstatic --no-input &&
+        python3 manage.py makemigrations &&
+        python3 manage.py migrate &&
+        gunicorn MyCommunity.wsgi:application --bind 0.0.0.0:80"
+    depends_on:
+      - mysql
+    links:
+      - mysql:mysql
+    restart: always
+    volumes:
+      - .:/app

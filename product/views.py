@@ -32,14 +32,14 @@ class ProductDetailView(APIView):
     # 자세히보기
     def get(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
-        
+
         # 보이기 상태일때
         if product.is_hide == False:
             serializer = ProductFeedSerializer(product)
             product.views += 1
             product.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        
+
         # 숨기기 상태일때
         elif product.is_hide == True:
             if request.user == product.user:
@@ -51,7 +51,7 @@ class ProductDetailView(APIView):
     # 수정
     def put(self, request, product_id):
         product = get_object_or_404(Product, id=product_id)
-        
+
         if request.user == product.user:
             # 끌어올리기
             if "refreshed_at" in request.data:
@@ -61,7 +61,8 @@ class ProductDetailView(APIView):
 
             # 내용 수정
             else:
-                serializer = ProductCreateSerializer(product, data=request.data)
+                serializer = ProductCreateSerializer(
+                    product, data=request.data)
                 if serializer.is_valid():
                     serializer.save(user=request.user)
                     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -169,7 +170,8 @@ class ProductBookmarkListView(generics.ListAPIView):
 
     # user_id 가져오기 위해 오버라이딩
     def get_queryset(self):
-        user_id = self.request.user.id
-        queryset = Product.objects.filter(transaction_status=0, is_hide=False, bookmark=user_id).order_by('-refreshed_at')
+        user = self.request.user
+        queryset = Product.objects.filter(
+            transaction_status=0, is_hide=False, bookmark=user).order_by('-refreshed_at')
         """거래중, 숨김상태 아님, 요청유저가 북마크한것만"""
         return queryset

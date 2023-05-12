@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'chat',
     "drf_yasg",
     'users',
+    "office",
 
 
 ]
@@ -50,8 +51,6 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = ["http://localhost:8000"]
-
 ROOT_URLCONF = "B7.urls"
 
 TEMPLATES = [
@@ -85,12 +84,18 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv('MYSQL_DATABASE'),
+        'USER': os.getenv('MYSQL_USER'),
+        'PASSWORD': os.getenv('MYSQL_PASSWORD'),
+        'HOST': 'mysql',
+        'PORT': 3306,
+        'OPTIONS':{
+            'charset':'utf8mb4'
+        }
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
