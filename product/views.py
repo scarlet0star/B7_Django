@@ -15,6 +15,7 @@ class ProductCreateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
+        print(request.user)
         serializer = ProductCreateSerializer(data=request.data, context={"images":request.data.getlist("images")})
         print(request.data)
         if serializer.is_valid():
@@ -103,6 +104,12 @@ class ProductFeedView(generics.ListAPIView):
 """관리자만"""
 class ProductCategoryCreateView(APIView):
     permission_classes = [permissions.IsAdminUser]
+
+    def get(self, request):
+        if request.user.is_admin == True:
+            return Response(status=status.HTTP_200_OK)
+        elif request.user.is_admin == False:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
     def post(self, request):
         serializer = ProductCategorySerializer(data=request.data)

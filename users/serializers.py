@@ -69,3 +69,11 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['access'] = str(refresh.access_token)
         data['user'] = self.user.name
         return data
+    
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['email'] = user.email
+        token['is_admin'] = user.is_admin
+
+        return token
