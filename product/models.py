@@ -82,4 +82,4 @@ class Product(models.Model):
 # 상품 이미지 모델
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField("이미지", upload_to='%Y/%m/')
+    image = models.ImageField("이미지", upload_to='%Y/%m/', null=True, blank=True, default=None)

@@ -30,15 +30,6 @@ class ProductImageCreateSerializer(serializers.ModelSerializer):
         fields = ('image',)
 
 
-# 상품 피드
-class ProductFeedSerializer(serializers.ModelSerializer):
-    images = ProductImageCreateSerializer(many=True, required=False)
-
-    class Meta:
-        model = Product
-        fields = "__all__"
-
-
 # 상품 등록
 class ProductCreateSerializer(serializers.ModelSerializer):
     images = ProductImageCreateSerializer(many=True, required=False)
@@ -70,3 +61,12 @@ class ProductCategorySerializer(serializers.ModelSerializer):
         model = ProductCategory
         fields = "__all__"
 
+
+# 상품 피드
+class ProductFeedSerializer(serializers.ModelSerializer):
+    images = ProductImageCreateSerializer(many=True, required=False)
+    category = ProductCategorySerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = "__all__"
