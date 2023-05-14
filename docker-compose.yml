@@ -10,9 +10,9 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./django:/app
+      - .:/app
       - ./config/nginx:/etc/nginx.conf.d
-      - ./django/media:/media
+      - ./media:/media
     depends_on:
       - django_app
 
@@ -46,3 +46,4 @@ services:
     restart: always
     volumes:
       - .:/app
+      - ./media:/media
