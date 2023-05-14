@@ -20,5 +20,5 @@ git page repo: https://github.com/scarlet0star/scarlet0star.github.io
 ## 주요 기능
 배포된 웹페이지 : https://scarlet0star.github.io 실제로 배포되었기 때문에 웹으로 접속가능.<br>
 상품들과 관련된 기능들 : 기본적인 CRUD , 북마크 ,피드 페이지 구현, 끌어올리기, 이미지 삽입, 카테고리 구현<br>
-simple JWT를 이용한 로그인 구현
+simple JWT를 이용한 로그인 구현<br>
 Chart.js를 통한 간단한 통계 구현
