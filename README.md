@@ -14,7 +14,7 @@ https://www.notion.so/Be-Se7en-ca50c20f58bc431baa4ebbd9313c5de4
 이현식 : 상품(Product) App<br>
 임라온 : User App<br>
 
-backend dns : https://lucedude.link<br>
+backend : https://lucedude.link<br>
 git page repo: https://github.com/scarlet0star/scarlet0star.github.io
 
 ## 주요 기능
